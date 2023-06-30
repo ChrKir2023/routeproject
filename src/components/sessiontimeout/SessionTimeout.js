@@ -26,6 +26,9 @@ const SessionTimeout = () => {
 
   const logOut = () => {
     AuthService.logout();
+    if (localStorage.getItem(user.username)){
+      localStorage.removeItem(user.username);
+    }  
     navigate("/login");
   };
 

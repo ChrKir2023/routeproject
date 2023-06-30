@@ -18,6 +18,9 @@ import DisplayPoints from "./components/displaypoints/DisplayPoints";
 import DisplayPolyLine from "./components/DisplayPolyLine";
 import UploadImageComponent from "./components/filehandling/UploadImageComponent";
 import DownloadImageComponent from "./components/filehandling/DownloadImageComponent";
+import HomeChatPage from "./components/chatapp/client/src/components/Home";
+import ChatPage from "./components/chatapp/client/src/components/ChatPage";
+import socketIO from "socket.io-client";
 
 import styles from "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 import {
@@ -27,6 +30,8 @@ import {
   Message,
   MessageInput,
 } from "@chatscope/chat-ui-kit-react";
+
+const socket = socketIO.connect("http://localhost:4000");
 
 const App = () => {
   const [showModeratorBoard, setShowModeratorBoard] = useState(false);
@@ -46,6 +51,9 @@ const App = () => {
 
   const logOut = () => {
     AuthService.logout();
+    if (localStorage.getItem(currentUser)){
+      localStorage.removeItem(currentUser);
+    }  
   };
 
   return (
@@ -87,6 +95,14 @@ const App = () => {
             </li>
           )}
 
+          {currentUser && (
+            <li className="nav-item">
+              <Link to={"/chathome"} className="nav-link">
+                Συνομιλία χρήστη
+              </Link>
+            </li>
+          )}
+
         </div>
 
         {currentUser ? (
@@ -106,7 +122,7 @@ const App = () => {
           <div className="navbar-nav ml-auto">
             <li className="nav-item">
               <Link to={"/login"} className="nav-link">
-                Login
+                Σύνδεση
               </Link>
             </li>
 
@@ -144,7 +160,8 @@ const App = () => {
           <Route path="/user" element={<BoardUser/>} />
           <Route path="/mod" element={<BoardModerator/>} />
           <Route path="/admin" element={<BoardAdmin/>} />
-          
+          <Route path="/chathome" element={<HomeChatPage/>}></Route>
+          <Route path="/chat" element={<ChatPage socket={socket} />}></Route>
         </Routes>
        
       </div>
