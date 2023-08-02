@@ -26,10 +26,11 @@ const SessionTimeout = () => {
 
   const logOut = () => {
     AuthService.logout();
-    if (localStorage.getItem(user.username)){
-      localStorage.removeItem(user.username);
+    if (localStorage.getItem(user.userName)){
+      localStorage.removeItem(user.userName);
     }  
     navigate("/login");
+	window.location.reload(false);
   };
 
   // start inactive check

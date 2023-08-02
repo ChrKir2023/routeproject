@@ -1,13 +1,15 @@
 
 /*import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";*/
-import "./Login.css";
+import Button from "react-bootstrap/Button";
+import "./Login.css";*/
 import React, { useState, useRef } from "react";
 import { useNavigate } from 'react-router-dom';
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import AuthService from "../services/auth.service";
+import background from "./navona.jpg";
+import ChangePassword from "./ChangePassword";
 
 /*export default function Login() {*/
 
@@ -15,7 +17,7 @@ const required = (value) => {
   if (!value) {
     return (
       <div className="alert alert-danger" role="alert">
-        This field is required!
+        Καθορίστηκε λανθασμένο όνομα χρήστη ή κωδικός πρόσβασης!
       </div>
     );
   }
@@ -40,6 +42,10 @@ const Login = () => {
   const onChangePassword = (e) => {
     const password = e.target.value;
     setPassword(password);
+  };
+  
+  const navigateChangePassword = () => {
+        navigate("/ChangePassword");
   };
 
   const handleLogin = (e) => {
@@ -74,7 +80,10 @@ const Login = () => {
   };
 
   return (
+  <div style={{ backgroundImage: `url(${background})` }}> 
+  
     <div className="col-md-12">
+	 
       <div className="card card-container">
         <img
           src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
@@ -84,7 +93,7 @@ const Login = () => {
 
         <Form onSubmit={handleLogin} ref={form}>
           <div className="form-group">
-            <label htmlFor="username">Username</label>
+            <label htmlFor="username">Όνομα χρήστη</label>
             <Input
               type="text"
               className="form-control"
@@ -96,7 +105,7 @@ const Login = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">Κωδικός πρόσβασης</label>
             <Input
               type="password"
               className="form-control"
@@ -105,17 +114,24 @@ const Login = () => {
               onChange={onChangePassword}
               validations={[required]}
             />
-          </div>
-
+		  </div>
+			&nbsp;
+			&nbsp;
+			<div id="openresetpage" class="align-to-right">
+                 <a href='#' onClick={() => navigateChangePassword()}> Ξέχασα τον κωδικό πρόσβασης </a>
+            </div>
+			&nbsp;
+			&nbsp;
           <div className="form-group">
             <button className="btn btn-primary btn-block" disabled={loading}>
               {loading && (
                 <span className="spinner-border spinner-border-sm"></span>
               )}
-              <span>Login</span>
+              <span>Σύνδεση</span>
             </button>
           </div>
-
+			&nbsp;
+			&nbsp;
           {message && (
             <div className="form-group">
               <div className="alert alert-danger" role="alert">
@@ -126,6 +142,7 @@ const Login = () => {
           <CheckButton style={{ display: "none" }} ref={checkBtn} />
         </Form>
       </div>
+	 </div> 
     </div>
   );
 };

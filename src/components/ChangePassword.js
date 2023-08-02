@@ -10,7 +10,7 @@ const required = (value) => {
   if (!value) {
     return (
       <div className="alert alert-danger" role="alert">
-        H τιμή είναι απαράιτητη!
+        H τιμή είναι απαραίτητη!
       </div>
     );
   }
@@ -27,7 +27,7 @@ const validEmail = (value) => {
 };
 
 const vusername = (value) => {
-  if (value.length < 3 || value.length > 20) {
+  if (value.length < 6 || value.length > 20) {
     return (
       <div className="alert alert-danger" role="alert">
         Το όνομα χρήστη πρέπει να είναι μεταξύ 6 και 20 χαρακτήρων.
@@ -47,24 +47,25 @@ const vpassword = (value) => {
   }
 };
 
-const vrole = (value) => {
+const vverifypassword = (value) => {
   if (value.length < 6 || value.length > 40) {
     return (
       <div className="alert alert-danger" role="alert">
-        The role must be admin,moderator,user.
+        Ο κωδικός πρόσβασης πρέπει να είναι μεταξύ 6 και 40 χαρακτήρων.
       </div>
     );
   }
 };
 
-const Register = () => {
+
+const ChangePassword = () => {
   const form = useRef();
   const checkBtn = useRef();
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("");
+  const [verifyPassword, setVerifyPassword] = useState("");
   const [successful, setSuccessful] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -83,12 +84,12 @@ const Register = () => {
     setPassword(password);
   };
   
-  const onChangeRole = (e) => {
-    const role = e.target.value;
-    setRole(role);
+  const onChangeVerifyPassword = (e) => {
+    const verifyPassword = e.target.value;
+    setVerifyPassword(verifyPassword);
   };
-
-  const handleRegister = (e) => {
+ 
+  const handleChangePassword = (e) => {
     e.preventDefault();
 
     setMessage("");
@@ -96,25 +97,33 @@ const Register = () => {
 
     form.current.validateAll();
 
-    if (checkBtn.current.context._errors.length === 0) {
-      AuthService.register(username, email, password).then(
-        (response) => {
-          setMessage(response.data.message);
-          setSuccessful(true);
-        },
-        (error) => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
+    if (checkBtn.current.context._errors.length === 0
+	   && (password === verifyPassword)) {
+		console.log("Within web service call! ");
+		  AuthService.changepassword(username, email, password).then(
+			(response) => {
+				console.log("Correct ");
+			  setMessage(response.data.message);
+			  setSuccessful(true);
+			},
+			(error) => {
+			  console.log("Error "); 	
+			  const resMessage =
+				(error.response &&
+				  error.response.data &&
+				  error.response.data.message) ||
+				error.message ||
+				error.toString();
 
-          setMessage(resMessage);
-          setSuccessful(false);
-        }
-      );
-    }
+			  setMessage(resMessage);
+			  setSuccessful(false);
+			}
+		  );
+		  console.log("No problem");
+    } else {
+		setMessage("Η τιμή του κωδικού πρόσβασης είναι διαφορετική από την τιμή επαλήθευσης!");
+	    setSuccessful(false);
+	}	
   };
 
   return (
@@ -126,7 +135,7 @@ const Register = () => {
           className="profile-img-card"
         />
 
-        <Form onSubmit={handleRegister} ref={form}>
+        <Form onSubmit={handleChangePassword} ref={form}>
           {!successful && (
             <div>
               <div className="form-group">
@@ -154,7 +163,7 @@ const Register = () => {
               </div>
 
               <div className="form-group">
-                <label htmlFor="password">Κωδικός πρόσβασης</label>
+                <label htmlFor="password">Νέος Κωδικός πρόσβασης</label>
                 <Input
                   type="password"
                   className="form-control"
@@ -164,10 +173,22 @@ const Register = () => {
                   validations={[required, vpassword]}
                 />
               </div>
+			  
+			  <div className="form-group">
+                <label htmlFor="verifyPassword">Επαλήθευση νέου Κωδικού πρόσβασης</label>
+                <Input
+                  type="password"
+                  className="form-control"
+                  name="verifyPassword"
+                  value={verifyPassword}
+                  onChange={onChangeVerifyPassword}
+                  validations={[required, vverifypassword]}
+                />
+              </div>
 			  &nbsp;
 			  &nbsp;
               <div className="form-group">
-                <button className="btn btn-primary btn-block">Καταχώρηση χρήστη</button>
+                <button className="btn btn-primary btn-block">Αλλαγή κωδικού πρόσβασης</button>
               </div>
             </div>
           )}
@@ -189,4 +210,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default ChangePassword;

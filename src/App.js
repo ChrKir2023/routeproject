@@ -8,6 +8,7 @@ import AuthService from "./services/auth.service";
 
 import Login from "./components/Login";
 import Register from "./components/Register";
+import ChangePassword from "./components/ChangePassword";
 import Home from "./components/Home";
 import Profile from "./components/Profile";
 import BoardUser from "./components/BoardUser";
@@ -57,7 +58,12 @@ const App = () => {
   };
 
   return (
-    <div>
+	<div style={{
+        backgroundColor: 'lightblue',
+		width: '100%',
+        height: '100%'
+		, padding: 20
+      }}>
       <nav className="navbar navbar-expand navbar-dark bg-dark">
         <Link to={"/"} className="navbar-brand">
           Αρχική σελίδα
@@ -65,7 +71,7 @@ const App = () => {
         <div className="navbar-nav mr-auto">
           <li className="nav-item">
             <Link to={"/home"} className="nav-link">
-              Home
+              Αρχική
             </Link>
           </li>
 
@@ -128,7 +134,13 @@ const App = () => {
 
             <li className="nav-item">
               <Link to={"/register"} className="nav-link">
-                Sign Up
+                Εγγραφή
+              </Link>
+            </li>
+			
+			<li className="nav-item">
+              <Link to={"/changepassword"} className="nav-link">
+                Αλλαγή κωδικού πρόσβασης
               </Link>
             </li>
           </div>
@@ -136,11 +148,12 @@ const App = () => {
       </nav>
 
       <div className="container mt-3">
-      <Routes>
+		<Routes>
           <Route path="/" element={<Home/>} />
           <Route path="/home" element={<Home/>} />
           <Route path="/login" element={<Login/>} />
           <Route path="/register" element={<Register/>} />
+		  <Route path="/changepassword" element={<ChangePassword/>} />
 		  <Route path="/map">
 				<Route path=":id/:longitude/:latitude" element={<DisplayMap />} />
 		  </Route>
@@ -163,9 +176,8 @@ const App = () => {
           <Route path="/chathome" element={<HomeChatPage/>}></Route>
           <Route path="/chat" element={<ChatPage socket={socket} />}></Route>
         </Routes>
-       
-      </div>
-	</div>
+       </div>
+    </div>	
 	);
 };
 

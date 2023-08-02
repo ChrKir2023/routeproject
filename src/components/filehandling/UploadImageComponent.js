@@ -2,6 +2,7 @@ import React, { useState, useRef, useForm, useEffect, Component } from 'react';
 import { useParams, useSearchParams, useNavigate ,useLocation } from "react-router-dom";
 import { Navigate } from 'react-router-dom';
 import FileService from '../../services/FileService';
+import Form from "react-validation/build/form";
 import axios from "axios";
 
 function UploadImageComponent() {
@@ -11,6 +12,9 @@ function UploadImageComponent() {
     let { routeid, pointid } = useParams();
     const API_URL = "http://localhost:8080/file";
     const navigate = useNavigate();
+	const [successful, setSuccessful] = useState(false);
+	const [message, setMessage] = useState("");
+	const form=useRef();
 
     const onFileChange = (event) => {
         console.log(event.target.files);
@@ -72,10 +76,16 @@ function UploadImageComponent() {
             'Content-Type': 'multipart/form-data',
           },
         }).then(res => {
-            if(res.ok) {
-                console.log(res.data);
-                alert("File uploaded successfully.")
-            }
+			console.log(res.data.message)
+            /*if(res.ok) {*/
+			if(res.data.message==="Επιτυχής ανέβασμα αρχείου!")	{
+			    console.log(res.data);
+                //alert("Το αρχείο φορτώθηκε επιτυχώς!")
+				setMessage("Το αρχείο φορτώθηκε επιτυχώς!");
+			    setSuccessful(true);
+            } else {
+				alert("Το αρχείο δεν φορτώθηκε επιτυχώς!")
+			}
         });
    
     
@@ -97,7 +107,7 @@ function UploadImageComponent() {
                 <div className='card col-md-6 offset-md-3 mt-5'>
                     <h3 className='text-center'>Ανέβασμα εικόνας</h3>
                     <div className='card-body'>
-                        <form onSubmit={onFileChangeHandler}>
+                        <form onSubmit={onFileChangeHandler} ref={form}>
                             <div>
                                 <label>Επιλογή αρχείου:</label>
                                 <input className='mx-2' type='file' label="Επιλογή" onChange={onFileChange}></input>
@@ -108,10 +118,21 @@ function UploadImageComponent() {
                                 <input className='mx-2' type='text' name='uploaderName' value={uploaderName} onChange={onUploaderNameChange}></input>
                             </div>
                             <button className='btn btn-success btn-sm mt-3' type='submit' disabled={!files || !uploaderName}>Ανέβασμα αρχείου</button>
+							{message && (
+								<div className="form-group">
+								  <div
+									className={ successful ? "alert alert-success" : "alert alert-danger" }
+									role="alert"
+								  >
+									{message}
+								  </div>
+								</div>
+							  )}
                         </form>
                     </div>
-                </div>
+				</div>
             </div>
+			
         );
     }
 
