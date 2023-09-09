@@ -97,9 +97,11 @@ const Register = () => {
     form.current.validateAll();
 
     if (checkBtn.current.context._errors.length === 0) {
+      console.log("Point 1");
       AuthService.register(username, email, password).then(
         (response) => {
-          setMessage(response.data.message);
+          console.log("Point 1",response);
+          setMessage(response.message.toString());
           setSuccessful(true);
         },
         (error) => {
