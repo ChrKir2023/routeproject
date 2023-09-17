@@ -18,7 +18,7 @@ function Pointspagination(props) {
     const user = AuthService.getCurrentUser();
 		const userid = user.id;
     console.log(userid);
-    fetch(`http://localhost:8080/api/add/pointbypageandsize?page=${currentPage}&userid=${userid}&size=5`)
+    fetch(`https://20.170.39.172:8443/api/add/pointbypageandsize?page=${currentPage}&userid=${userid}&size=5&routeid=${valrouteid}`)
         .then(response => response.json())
         .then(data => {
           setPointsData(data);

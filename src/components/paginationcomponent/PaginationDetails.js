@@ -113,7 +113,7 @@ const renderData = (data)=>{
 }
 
   // init
-  const API_URL = "http://localhost:8080/api/add";	
+  const API_URL = "https://20.170.39.172:8443/api/add";	
   const { currentPage, maxPageLimit, minPageLimit} = props;
   const totalPages = props.response.totalPages-1;
   let data = props.response.allPaginatedPoints;
