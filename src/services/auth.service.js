@@ -11,6 +11,15 @@ const register = (username, email, password,role) => {
   });
 };
 
+const changepassword = (username, email, password) => {
+	console.log(" Web Service Within web service call! ");
+  return axios.put(API_URL + "changepassword", {
+    username,
+    email,
+    password
+  });
+};
+
 const login = (username, password) => {
   return axios
     .post(API_URL + "signin", {
@@ -36,6 +45,7 @@ const getCurrentUser = () => {
 
 const AuthService = {
   register,
+  changepassword,
   login,
   logout,
   getCurrentUser,
